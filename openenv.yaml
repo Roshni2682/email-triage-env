@@ -1,0 +1,77 @@
+
+name: email-triage-env
+version: "1.0.0"
+description: >
+  A real-world email triage environment where an AI agent reads incoming emails
+  and must classify, prioritize, and route them appropriately. Simulates the
+  daily task of inbox management performed by support agents and teams.
+
+author: hackathon-submission
+license: MIT
+
+tasks:
+  - id: task1
+    name: Urgency Classification
+    difficulty: easy
+    description: Determine whether each email is urgent or not urgent.
+    max_steps: 5
+    score_range: [0.0, 1.0]
+
+  - id: task2
+    name: Category and Priority Assignment
+    difficulty: medium
+    description: Assign the correct category and priority level to each email.
+    max_steps: 7
+    score_range: [0.0, 1.0]
+
+  - id: task3
+    name: Full Email Triage
+    difficulty: hard
+    description: >
+      Full triage — assign category, priority, action, routing department,
+      and write a one-line summary for each email.
+    max_steps: 10
+    score_range: [0.0, 1.0]
+
+observation_space:
+  type: object
+  fields:
+    email:
+      subject: string
+      body: string
+      sender: string
+      timestamp: string
+      id: string
+    task_id: string
+    step_number: integer
+    max_steps: integer
+    task_description: string
+
+action_space:
+  task1:
+    is_urgent: boolean
+  task2:
+    category: enum [spam, support, billing, complaint, inquiry, internal, newsletter]
+    priority: enum [low, medium, high, urgent]
+  task3:
+    category: enum [spam, support, billing, complaint, inquiry, internal, newsletter]
+    priority: enum [low, medium, high, urgent]
+    action: enum [archive, reply, escalate, delete, forward]
+    routing: enum [support, billing, management, sales, none]
+    summary: string (max 100 chars)
+
+reward:
+  type: float
+  range: [0.0, 1.0]
+  description: >
+    Partial credit reward based on correctness of each field.
+    Task 1: binary (0 or 1). Task 2: weighted category + priority score.
+    Task 3: weighted sum across all 5 fields.
+
+tags:
+  - email
+  - triage
+  - classification
+  - nlp
+  - real-world
+  - support
