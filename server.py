@@ -51,7 +51,7 @@ def root():
 
 
 @app.post("/reset")
-def reset(req: CreateSessionRequest):
+def reset(req: CreateSessionRequest = None):
     session_id = str(uuid.uuid4())
     try:
         env = EmailTriageEnv(task_id=req.task_id, seed=req.seed)
