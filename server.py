@@ -6,6 +6,7 @@ This is the entry point for Hugging Face Spaces deployment.
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import Union, Optional
 import uuid
@@ -40,14 +41,28 @@ class StepRequest(BaseModel):
     action: dict  # Raw dict, will be parsed based on task
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def root():
-    return {
-        "name": "Email Triage OpenEnv",
-        "version": "1.0.0",
-        "tasks": ["task1", "task2", "task3"],
-        "endpoints": ["/reset", "/step", "/state", "/info"]
-    }
+    return """
+    <html>
+        <head>
+            <title>Email Triage App</title>
+        </head>
+        <body style="font-family: Arial; text-align:center; margin-top:50px;">
+            <h1>🚀 Email Triage App is Running!</h1>
+            <p>Backend is live successfully on Hugging Face.</p>
+
+            <h3>Available Endpoints:</h3>
+            <ul>
+                <li>/reset</li>
+                <li>/step</li>
+                <li>/state</li>
+                <li>/info</li>
+                <li>/health</li>
+            </ul>
+        </body>
+    </html>
+    """
 
 
 @app.post("/reset")
