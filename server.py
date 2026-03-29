@@ -54,6 +54,8 @@ def root():
 def reset(req: CreateSessionRequest = None):
     session_id = str(uuid.uuid4())
     try:
+        if req is None:
+            req = CreateSessionRequest()
         env = EmailTriageEnv(task_id=req.task_id, seed=req.seed)
         obs = env.reset()
         sessions[session_id] = env
