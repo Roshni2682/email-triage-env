@@ -10,3 +10,4 @@ torch
 torchvision
 torchaudio
 transformers
+openenv>=0.1.13
